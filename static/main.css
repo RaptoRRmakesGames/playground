@@ -1,0 +1,39 @@
+ul{
+    list-style: none !important;
+}
+body{
+    overflow: hidden;
+}
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: 20px 0;
+}
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    table-layout: fixed; /* Force fixed cell dimensions */
+    width: 100%; /* Optional: Adjust this to fit the screen */
+}
+td {
+    border: 1px solid black;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    overflow: hidden; /* Prevent content overflow */
+}
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+}
+input {
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    padding: 5px;
+    font-size: 50px;
+    width: fit-content;
+}
+input:focus {
+    border-bottom: 2px solid grey; /* Change color when focused */
+}

@@ -1,0 +1,59 @@
+{% extends 'base/base.html'%}
+
+{% block content %}
+
+<h1>Determinant</h1>
+
+<form action="/determinant" method="post">
+<table id="dynamicTable">
+    <tr>
+        <td><input required type="number" name="num_1_1" id=""></td>
+        <td><input required type="number" name="num_1_2" id=""></td>
+    </tr>
+    <tr>
+        <td><input required type="number" name="num_2_1" id=""></td>
+        <td><input required type="number" name="num_2_2" id=""></td>
+    </tr>
+</table>
+<p>= {{result|safe}}</p>
+<input type="number" name="n" id="n" style="display: none;" value="2">
+<button type="button" onclick="addColumnAndRow()">Add Column and Row</button>
+
+<button type="submit" onclick="submit()">Submit</button>
+</form>
+
+<script>
+
+    var n = 2
+    function submit(){
+
+    }
+
+    function addColumnAndRow() {
+        if (n > 6){return}
+        const table = document.getElementById("dynamicTable");
+        const rows = table.rows;
+        const rowCount = rows.length;
+        n++;
+        document.getElementById('n').value = n;
+
+
+        // Add a new column to each existing row
+        for (let i = 0; i < rowCount; i++) {
+            const cell = rows[i].insertCell(-1); // Append at the end
+            var name = `num_${i + 1}_${rows[i].cells.length}`;
+            cell.innerHTML = `<input required type="number" name="${name}" id="">`
+
+        }
+
+        // Add a new row at the end
+        const newRow = table.insertRow(-1); // Append at the end
+        for (let i = 0; i < rows[0].cells.length; i++) {
+            const cell = newRow.insertCell(-1);
+            var name = `num_${rowCount + 1}_${i + 1}`;
+            cell.innerHTML = `<input required type="number" name="${name}" id="">`
+        }
+    }
+</script>
+
+{% endblock%}
