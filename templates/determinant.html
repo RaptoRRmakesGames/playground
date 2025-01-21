@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<h1>Determinant</h1>
+<h1>Determinant ({{which}})</h1>
+<h3>{{extra_text|safe}}</h3>
 
 <form action="/determinant" method="post">
 <table id="dynamicTable">
@@ -15,7 +16,7 @@
         <td><input required type="number" name="num_2_2" id=""></td>
     </tr>
 </table>
-<p>= {{result|safe}}</p>
+<p>{{result|safe}}</p>
 <input type="number" name="n" id="n" style="display: none;" value="2">
 <button type="button" onclick="addColumnAndRow()">Add Column and Row</button>
 
@@ -30,7 +31,9 @@
     }
 
     function addColumnAndRow() {
+        {% if which == 'Recursive - O(n!)'%}
         if (n > 6){return}
+        {% endif %}
         const table = document.getElementById("dynamicTable");
         const rows = table.rows;
         const rowCount = rows.length;
