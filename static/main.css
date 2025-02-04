@@ -1,4 +1,4 @@
-ul{
+/* ul{
     list-style: none !important;
 }
 body{
@@ -12,15 +12,15 @@ table {
 table {
     border-collapse: collapse;
     margin: 20px 0;
-    table-layout: fixed; /* Force fixed cell dimensions */
-    width: 100%; /* Optional: Adjust this to fit the screen */
+    table-layout: fixed; 
+    width: 100%; 
 }
 td {
     border: 1px solid black;
     text-align: center;
     width: 50px;
     height: 50px;
-    overflow: hidden; /* Prevent content overflow */
+    overflow: hidden; 
 }
 button {
     margin-top: 10px;
@@ -35,5 +35,193 @@ input {
     width: fit-content;
 }
 input:focus {
-    border-bottom: 2px solid grey; /* Change color when focused */
-}
+    border-bottom: 2px solid grey; 
+} */
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: century gothic;
+    }
+
+    h1, h2,h3,h4,h5,h6,p,a,label{
+        color: white;
+    }
+
+    body {
+        background-color: #000;
+    }
+
+    .main {
+        display: flex;
+    }
+
+    table {
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    .anotherSeries {
+        background-color: #00000000;
+    }
+
+    td,
+    th {
+        border: transparent solid 1px;
+        padding: 2px;
+        color: #fff;
+    }
+
+    #pd_tab_title {
+        background-color: rgb(32, 39, 60);
+        color: #fff;
+    }
+
+    .pd_tab_legend {
+        background-color: #37474f08;
+        margin: 5px;
+        font-size: 10px;
+    }
+
+    #pd_tab_legend_title {
+        background-color: #37474f;
+    }
+
+    #pd_tab_series_title {
+        background-color: #3e2723;
+    }
+
+    ul {
+        border: black solid 1px;
+    }
+
+    ul li {
+        display: block;
+        padding: 8px;
+    }
+
+    ul li a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    ul li ul li p {
+        font-family: arial;
+        font-size: 13px;
+    }
+
+    .main_btn {
+        cursor: pointer;
+    }
+
+    .sub_btn {
+        cursor: default;
+    }
+
+    .sub_btn p {
+        color: #fff;
+    }
+
+    ul li ul {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+    }
+
+    ul li:hover>ul,
+    ul li ul:hover {
+        visibility: visible;
+        opacity: 1;
+        display: block;
+    }
+
+    ul li.nonmetal {
+        background-color: #d81b60;
+    }
+
+    ul li.nonmetal:hover>ul,
+    ul li ul:hover {
+        background-color: #d81b60;
+    }
+
+    ul li.halogen {
+        background-color: #d81b60;
+    }
+
+    ul li.halogen:hover>ul,
+    ul li ul:hover {
+        background-color: #d81b60;
+    }
+
+    ul li.noble_gas {
+        background-color: #8e24aa;
+    }
+
+    ul li.noble_gas:hover>ul,
+    ul li ul:hover {
+        background-color: #8e24aa;
+    }
+
+    ul li.alkali_metal {
+        background-color: #1e88e5;
+    }
+
+    ul li.alkali_metal:hover>ul,
+    ul li ul:hover {
+        background-color: #1e88e5;
+    }
+
+    ul li.alkaline_earth_metal {
+        background-color: #546e7a;
+    }
+
+    ul li.alkaline_earth_metal:hover>ul,
+    ul li ul:hover {
+        background-color: #546e7a;
+    }
+
+    ul li.transition_metal {
+        background-color: #5e35b1;
+    }
+
+    ul li.transition_metal:hover>ul,
+    ul li ul:hover {
+        background-color: #5e35b1;
+    }
+
+    ul li.post-transition_metal {
+        background-color: #f4511e;
+    }
+
+    ul li.post-transition_metal:hover>ul,
+    ul li ul:hover {
+        background-color: #f4511e;
+    }
+
+    ul li.metalloid {
+        background-color: #6d4c41;
+    }
+
+    ul li.metalloid:hover>ul,
+    ul li ul:hover {
+        background-color: #6d4c41;
+    }
+
+    ul li.lanthanide {
+        background-color: #7cb342;
+    }
+
+    ul li.lanthanide:hover>ul,
+    ul li ul:hover {
+        background-color: #7cb342;
+    }
+
+    ul li.actinide {
+        background-color: #43a047;
+    }
+
+    ul li.actinide:hover>ul,
+    ul li ul:hover {
+        background-color: #43a047;
+    }

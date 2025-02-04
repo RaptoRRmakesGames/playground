@@ -1,0 +1,114 @@
+{% extends 'base/base.html'%}
+
+{% block content %}
+
+
+
+<h1>Molar Mass Calculator</h1>
+
+<br>
+
+<form action="/molar_mass_calculator" method="post">
+    <label for="">Your Compound</label>
+    <input type="text" readonly name="formula_field" id="formula_field">
+    <input type="text" hidden readonly name="code_field" id="code_field">
+    <input type="submit" name="" id="" value="Calculate Molar Mass">
+</form>
+
+<h2 style="text-decoration: underline;">{{answer}}</h2>
+
+<br>
+
+<table>
+    <tr>
+        <th>Periodic Table</th>
+    </tr>
+    <tr>
+        <td>
+            <table style="width: 70em; height: 40em">
+                <tr>
+                    <td></td>
+                    <td>IA</td>
+                    <td colspan="16"></td>
+                    <td>VIIIA</td>
+                </tr>
+
+                {% for row in range(1, 8) %}
+                <tr>
+                    <td>{{ row }}</td>
+                    {% for col in range(1, 19) %}
+                        {% set element = elements | selectattr("xpos", "equalto", col) | selectattr("ypos", "equalto", row) | list %}
+                        <td>
+                            {% if element %}
+                                {% set el = element[0] %}
+                                <div onclick="printIndex(this)" data-index="{{el['number']}}" data-name="{{el['symbol']}}" class="element" style="background-color: #{{ el['cpk-hex'] }}">
+                                    <a  target="_blank">{{ el["symbol"] }}</a>
+                                    <br>
+                                    <small>{{ el["number"] }}</small>
+                                </div>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+<script>
+    let elementCounts = {};
+
+    function printIndex(element) {
+        const elementName = element.getAttribute("data-name");
+        const elementIndex = element.getAttribute("data-index");
+        
+        // Update the counts of the elements clicked
+        if (!elementCounts[elementName]) {
+            elementCounts[elementName] = 0;
+        }
+        elementCounts[elementName]++;
+
+        // Update formula field
+        let formulaField = document.getElementById("formula_field");
+        let formula = formulaField.value;
+
+        // Check if the element is already in the formula and update accordingly
+        if (elementCounts[elementName] > 1) {
+            // If the element was already in the formula, just update the last part with count
+            formula = formula.replace(new RegExp(elementName + "(\\d*)"), elementName + elementCounts[elementName]);
+        } else {
+            // If it's the first occurrence, just append it
+            formula += elementName;
+        }
+        formulaField.value = formula;
+
+        // Update code field
+        let codeField = document.getElementById("code_field");
+        let code = codeField.value;
+
+        // Check if the element is already in the code and update accordingly
+        let regex = new RegExp(`\\[${elementIndex}x\\d*\\]`);
+        if (elementCounts[elementName] > 1) {
+            // If the element was already in the code, update the count
+            code = code.replace(regex, `[${elementIndex}x${elementCounts[elementName]}]`);
+        } else {
+            // If it's the first occurrence, add it with [index x 1]
+            code += `[${elementIndex}x1]`;
+        }
+        codeField.value = code;
+
+        // Display the updated values
+        console.log("Formula: " + formulaField.value);
+        console.log("Code: " + codeField.value);
+    }
+</script>
+
+
+       
+
+
+
+
+{% endblock%}

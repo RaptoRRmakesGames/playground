@@ -1,4 +1,4 @@
-from initialization import app 
+from molar_mass_calculator import app 
 from flask import Flask, render_template, redirect, request
 import copy
 
