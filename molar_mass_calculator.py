@@ -4,27 +4,27 @@ from flask import Flask, render_template, redirect, request, jsonify
 import copy
 import json 
 import time , requests
+from functools import cache
 
 class PeriodicTable:
-    
+    data = []  # Class-level variable to store the periodic table data
+
     def __init__(self):
-        before = time.time()
-        with open('periodic_table.json', 'r', encoding="utf-8") as f:
-            self.data = json.load(f)['elements']
-        self.__final = time.time() - before
-        
+        if not PeriodicTable.data:  # Check if the data is already loaded
+            before = time.time()
+            with open('periodic_table.json', 'r', encoding="utf-8") as f:
+                PeriodicTable.data = json.load(f)['elements']  # Load data only once
+            self.__final = time.time() - before
+        else:
+            self.__final = 0  # No load time if data is already in memory
+
     @staticmethod
     def list_elements():
-        
-        with open('periodic_table.json', 'r', encoding="utf-8") as f:
-            alldata = json.load(f)['elements']
-        rtn = []
-        for data in alldata:
-            rtn.append(data['symbol'])
-        return rtn
+        return [data['symbol'] for data in PeriodicTable.data]
+
     def get_load_time(self):
-        
         return self.__final
+
 
 
 @app.route('/molar_mass_calculator', methods=['GET', 'POST'])
@@ -34,6 +34,8 @@ def molar_mass_calculator():
     
     if request.method == 'GET':
         return render_template('molar_mass_calculator.html', elements = periodic_table.data, answer='')
+    
+    print('made it to function')
     
     print(check_formula(request.form.get('formula_field')))
     if not check_formula(request.form.get('formula_field')):
@@ -62,6 +64,7 @@ def molar_mass_calculator():
 import requests
 
 @app.route('/check_formula_<formula>', methods=['POST'])
+@cache
 def check_formula(formula):
     """Check if a chemical formula is a real compound using PubChem API."""
     
