@@ -1,26 +1,93 @@
 from initialization import app 
-from molar_mass_calculator import app 
 from flask import Flask, render_template, redirect, request, jsonify
 import copy
 import json 
 import time , requests
 from functools import cache
+import mysql.connector
+
+def connect():
+
+    with open("db_creds.json") as f:
+        db_cr = json.load(f)
+
+    db = mysql.connector.connect(
+        host=db_cr["host"],
+        user=db_cr["username"],
+        passwd=db_cr["password"],
+        database=db_cr["dbname"],
+        port=db_cr["port"],
+    )
+
+    return db, db.cursor()
+
+
+
+def execute(query: str, args=None):
+    if args is None:
+        args = []
+
+    dbe, c = connect()
+
+    try:
+        c.execute(query, args)
+
+        # Check if the query is a SELECT statement
+        if "select" in query.lower():
+            dbe.commit()
+            return c.fetchall()
+        else:
+            dbe.commit()
+            return None
+    # except Exception as e:
+    #     # Log or print the error for debugging purposes
+    #     print(f"DB EXECUTION ERROR: {e}")
+    #     #dbe.rollback()  # Roll back in case of an error in non-SELECT queries
+    #     return None
+    finally:
+        try:
+
+            c.close()
+            dbe.close()
+        except Exception:
+            f = c.fetchall()
+
+            c.close()
+            dbe.close()
+
+            return f
+        
+        
 
 class PeriodicTable:
-    data = []  # Class-level variable to store the periodic table data
-
     def __init__(self):
-        if not PeriodicTable.data:  # Check if the data is already loaded
-            before = time.time()
-            with open('periodic_table.json', 'r', encoding="utf-8") as f:
-                PeriodicTable.data = json.load(f)['elements']  # Load data only once
-            self.__final = time.time() - before
-        else:
-            self.__final = 0  # No load time if data is already in memory
+
+        before = time.time()
+        
+        self.data = []
+        raw_data = execute('SELECT json FROM chem_elements')
+
+        for f in raw_data:
+            json_str = f[0]  # Extract JSON string from the tuple
+
+            if not json_str:  # Skip NULL or empty values
+                print("Skipping empty entry.")
+                continue  
+
+            try:
+                parsed_json = json.loads(json_str)  # Parse JSON
+                self.data.append(parsed_json)
+            except json.JSONDecodeError as e:
+                print(f"⚠️ Invalid JSON in database: {json_str}")  # Debugging output
+                print(f"Error: {e}")
+        
+        self.__final = time.time() - before
 
     @staticmethod
     def list_elements():
-        return [data['symbol'] for data in PeriodicTable.data]
+        pt = PeriodicTable()
+        print(pt.data)
+        return [d for d in pt.data]
 
     def get_load_time(self):
         return self.__final
@@ -31,6 +98,7 @@ class PeriodicTable:
 def molar_mass_calculator():
     
     periodic_table = PeriodicTable()
+    print(periodic_table.data[0])
     
     if request.method == 'GET':
         return render_template('molar_mass_calculator.html', elements = periodic_table.data, answer='')
@@ -90,3 +158,20 @@ def check_formula(formula):
         return 'IdentifierList' in dict(data).keys()
     print('asdw')
     return False
+
+if __name__ == '__main__':
+    execute('TRUNCATE TABLE chem_elements')
+    with open('periodic_table.json', 'r', encoding='utf-8') as f:
+        data_list = json.load(f)['elements']
+        
+        for data in data_list:
+            final_data = {
+                'name' : data['name'],
+                'symbol' : data['symbol'],
+                'xpos' : data['xpos'],
+                'ypos' : data['ypos'],
+                'atomic_mass' : data['atomic_mass'],
+                'number' : data['number'],
+                'cpk-hex' : data['cpk-hex']
+                }
+            execute('INSERT INTO chem_elements (json) VALUES (%s)', [str(final_data).replace("'", '"'), ])
