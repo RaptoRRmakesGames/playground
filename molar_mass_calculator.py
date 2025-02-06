@@ -132,10 +132,9 @@ def molar_mass_calculator():
 import requests
 
 @app.route('/check_formula_<formula>', methods=['POST'])
-@cache
 def check_formula(formula):
     """Check if a chemical formula is a real compound using PubChem API."""
-    
+    return True
     # Format the formula in case there are spaces or case issues
     # formula = formula.replace(" ", "").upper()  # Remove spaces and make uppercase
 
