@@ -78,7 +78,7 @@ class PeriodicTable:
                 parsed_json = json.loads(json_str)  # Parse JSON
                 self.data.append(parsed_json)
             except json.JSONDecodeError as e:
-                print(f"⚠️ Invalid JSON in database: {json_str}")  # Debugging output
+                print(f" Invalid JSON in database: {json_str}")  # Debugging output
                 print(f"Error: {e}")
         
         self.__final = time.time() - before
